@@ -315,8 +315,9 @@ my_solution = MySolution()
 # Specify ENABLE_LOG to decide whether or not output the log of packets. ENABLE_LOG=True by default.
 # You can get more information about parameters at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#constant
 emulator = PccEmulator(
+    block_file=["traces/data_video.csv", "traces/data_audio.csv"],
+    trace_file="traces/trace.txt",
     solution=my_solution,
-    USE_CWND=True,
     ENABLE_LOG=True
 )
 
@@ -330,7 +331,3 @@ emulator.print_debug()
 # Output the picture of pcc_emulator-analysis.png
 # You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#pcc_emulator-analysispng.
 analyze_pcc_emulator(log_packet_file, file_range="all")
-
-# Output the picture of cwnd_changing.png
-# You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#cwnd_changingpng
-plot_cwnd(log_packet_file, file_range="all")

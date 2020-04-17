@@ -144,6 +144,8 @@ my_solution = MySolution()
 # Specify ENABLE_LOG to decide whether or not output the log of packets. ENABLE_LOG=True by default.
 # You can get more information about parameters at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#constant
 emulator = PccEmulator(
+    block_file=["traces/data_video.csv", "traces/data_audio.csv"],
+    trace_file="traces/trace.txt",
     solution=my_solution,
     USE_CWND=True,
     ENABLE_LOG=True
