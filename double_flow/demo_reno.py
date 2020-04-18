@@ -144,7 +144,7 @@ my_solution = MySolution()
 # Specify ENABLE_LOG to decide whether or not output the log of packets. ENABLE_LOG=True by default.
 # You can get more information about parameters at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#constant
 emulator = create_2flow_emulator(
-    block_file=["../traces/data_video.csv", "../traces/data_audio.csv"],
+    block_file="../traces/block.txt",
     trace_file="../traces/trace.txt",
     solution=my_solution
 )
