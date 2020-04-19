@@ -143,7 +143,7 @@ class RL(CongestionControl):
 
     def __init__(self):
         super(RL, self).__init__()
-
+        self.USE_CWND=False
         self.send_rate = 40.0
         self.cwnd = 5000
 
