@@ -8,9 +8,10 @@ from simple_emulator import PccEmulator, CongestionControl
 from simple_emulator import Packet_selection
 
 # We provided some function of plotting to make you analyze result easily in utils.py
-from simple_emulator import analyze_pcc_emulator, plot_cwnd, plot_throughput
+from simple_emulator import analyze_pcc_emulator, plot_cwnd, plot_rate
 
 from simple_emulator import constant
+from simple_emulator import cal_qoe
 from config.constant import *
 # from utils import debug_print
 from objects.cc_base import CongestionControl
@@ -331,3 +332,7 @@ emulator.print_debug()
 # Output the picture of pcc_emulator-analysis.png
 # You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#pcc_emulator-analysispng.
 analyze_pcc_emulator(log_packet_file, file_range="all")
+
+plot_rate(log_packet_file, trace_file="traces/trace.txt", file_range="all")
+
+print(cal_qoe())
