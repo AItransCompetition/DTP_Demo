@@ -73,7 +73,7 @@ class MySolution(Packet_selection, Reno):
         return super().make_decision(cur_time)
 
     def cc_trigger(self, data):
-        packet_type = data["packet_type"]
+        packet_type = data["event_type"]
         event_time = data["event_time"]
 
         if self.cur_time < event_time:
@@ -125,7 +125,7 @@ class MySolution(Packet_selection, Reno):
         """
         self._input_list.append(data)
 
-        if data["packet_type"] != constant.PACKET_TYPE_TEMP:
+        if data["event_type"] != constant.PACKET_TYPE_TEMP:
             self.cc_trigger(data)
             return {
                 "cwnd" : self.cwnd,
