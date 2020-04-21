@@ -155,7 +155,7 @@ emulator = PccEmulator(
 
 # Run the emulator and you can specify the time for the emualtor's running.
 # It will run until there is no packet can sent by default.
-emulator.run_for_dur()
+emulator.run_for_dur(15)
 
 # print the debug information of links and senders
 emulator.print_debug()
