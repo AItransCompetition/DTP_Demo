@@ -16,7 +16,14 @@ from config.constant import *
 # from utils import debug_print
 from objects.cc_base import CongestionControl
 import numpy as np;
+
+# for tf version < 2.0
 import tensorflow as tf
+
+# for tf version >= 2.0
+# import tensorflow.compat.v1 as tf
+# tf.disable_v2_behavior()
+
 import random
 
 np.random.seed(2)
