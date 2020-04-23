@@ -19,6 +19,10 @@ from simple_emulator import constant
 
 from simple_emulator import cal_qoe
 
+EVENT_TYPE_FINISHED='F'
+EVENT_TYPE_DROP='D'
+EVENT_TYPE_TEMP='T'
+
 # Your solution should include packet selection and congestion control.
 # So, we recommend you to achieve it by inherit the objects we provided and overwritten necessary method.
 class MySolution(Packet_selection, Reno):
@@ -74,14 +78,14 @@ class MySolution(Packet_selection, Reno):
         return super().make_decision(cur_time)
 
     def cc_trigger(self, data):
-        packet_type = data["event_type"]
+        event_type = data["event_type"]
         event_time = data["event_time"]
 
         if self.cur_time < event_time:
             self.last_cwnd = 0
             self.instant_drop_nums = 0
 
-        if packet_type == constant.PACKET_TYPE_DROP:
+        if event_type == EVENT_TYPE_DROP:
             if self.instant_drop_nums > 0:
                 return
             self.instant_drop_nums += 1
@@ -94,7 +98,7 @@ class MySolution(Packet_selection, Reno):
                 self.cwnd = self.last_cwnd
                 self.last_cwnd = 0
 
-        elif packet_type == constant.PACKET_TYPE_FINISHED:
+        elif event_type == EVENT_TYPE_FINISHED:
             # Ref 1
             if event_time <= self.cur_time:
                 return
@@ -126,7 +130,7 @@ class MySolution(Packet_selection, Reno):
         """
         self._input_list.append(data)
 
-        if data["event_type"] != constant.PACKET_TYPE_TEMP:
+        if data["event_type"] != EVENT_TYPE_TEMP:
             self.cc_trigger(data)
             return {
                 "cwnd" : self.cwnd,

@@ -29,6 +29,10 @@ import random
 np.random.seed(2)
 tf.set_random_seed(2)  # reproducible
 
+EVENT_TYPE_FINISHED='F'
+EVENT_TYPE_DROP='D'
+EVENT_TYPE_TEMP='T'
+
 # Superparameters
 OUTPUT_GRAPH = False
 MAX_EPISODE = 3000
@@ -171,10 +175,10 @@ class RL(CongestionControl):
 
     def cc_trigger(self, data):
 
-        packet_type = data["event_type"]
+        event_type = data["event_type"]
         event_time = data["event_time"]
 
-        if packet_type == constant.PACKET_TYPE_DROP:
+        if event_type == EVENT_TYPE_DROP:
             self.result_list.append(1)
         else:
             self.result_list.append(0)
@@ -260,7 +264,7 @@ class RL(CongestionControl):
     def append_input(self, data):
         self._input_list.append(data)
 
-        if data["event_type"] != constant.PACKET_TYPE_TEMP:
+        if data["event_type"] != EVENT_TYPE_TEMP:
             self.cc_trigger(data)
             return {
                 "cwnd" : self.cwnd,
