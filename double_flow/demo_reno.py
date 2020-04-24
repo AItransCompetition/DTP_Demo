@@ -57,10 +57,17 @@ class MySolution(Packet_selection, Reno):
         :return: int
         """
         def is_better(packet):
-            if best_packet.create_time != packet.create_time:
-                return best_packet.create_time > packet.create_time
-            return (cur_time - packet.create_time) * best_packet.block_info["Deadline"] > \
-                    (cur_time - best_packet.create_time) * packet.block_info["Deadline"]
+            best_block_create_time = best_packet.block_info["Create_time"]
+            packet_block_create_time = packet.block_info["Create_time"]
+            # if packet is miss ddl
+            if (cur_time - packet_block_create_time) >= packet.block_info["Deadline"]:
+                return False
+            if (cur_time - best_block_create_time) >= best_packet.block_info["Deadline"]:
+                return True
+            if best_block_create_time != packet_block_create_time:
+                return best_block_create_time > packet_block_create_time
+            return (cur_time - best_block_create_time) * best_packet.block_info["Deadline"] > \
+                   (cur_time - packet_block_create_time) * packet.block_info["Deadline"]
 
         best_packet_idx = -1
         best_packet = None
@@ -151,7 +158,7 @@ my_solution = MySolution()
 # Specify ENABLE_LOG to decide whether or not output the log of packets. ENABLE_LOG=True by default.
 # You can get more information about parameters at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#constant
 emulator = create_2flow_emulator(
-    block_file="../traces/block.txt",
+    block_file=["../traces/data_video.csv", "../traces/data_audio.csv"],
     trace_file="../traces/trace.txt",
     solution=my_solution
 )
