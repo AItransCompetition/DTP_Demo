@@ -323,33 +323,34 @@ class MySolution(Packet_selection, RL):
         return super().append_input(data)
 
 
-# The file path of packets' log
-log_packet_file = "output/packet_log/packet-0.log"
+if __name__ == '__main__':
+    # The file path of packets' log
+    log_packet_file = "output/packet_log/packet-0.log"
 
-# Use the object you created above
-my_solution = MySolution()
+    # Use the object you created above
+    my_solution = MySolution()
 
-# Create the emulator using your solution
-# Specify USE_CWND to decide whether or not use crowded windows. USE_CWND=True by default.
-# Specify ENABLE_LOG to decide whether or not output the log of packets. ENABLE_LOG=True by default.
-# You can get more information about parameters at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#constant
-emulator = create_2flow_emulator(
-    block_file=["../traces/data_video.csv", "../traces/data_audio.csv"],
-    trace_file="../traces/trace.txt",
-    solution=my_solution
-)
+    # Create the emulator using your solution
+    # Specify USE_CWND to decide whether or not use crowded windows. USE_CWND=True by default.
+    # Specify ENABLE_LOG to decide whether or not output the log of packets. ENABLE_LOG=True by default.
+    # You can get more information about parameters at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#constant
+    emulator = create_2flow_emulator(
+        block_file=["../traces/data_video.csv", "../traces/data_audio.csv"],
+        trace_file="../traces/trace.txt",
+        solution=my_solution
+    )
 
-# Run the emulator and you can specify the time for the emualtor's running.
-# It will run until there is no packet can sent by default.
-emulator.run_for_dur(15)
+    # Run the emulator and you can specify the time for the emualtor's running.
+    # It will run until there is no packet can sent by default.
+    emulator.run_for_dur(15)
 
-# print the debug information of links and senders
-emulator.print_debug()
+    # print the debug information of links and senders
+    emulator.print_debug()
 
-# Output the picture of pcc_emulator-analysis.png
-# You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#pcc_emulator-analysispng.
-analyze_pcc_emulator(log_packet_file, file_range="all", sender=[1])
+    # Output the picture of pcc_emulator-analysis.png
+    # You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#pcc_emulator-analysispng.
+    analyze_pcc_emulator(log_packet_file, file_range="all", sender=[1])
 
-plot_rate(log_packet_file, trace_file="../traces/trace.txt", file_range="all", sender=[1])
+    plot_rate(log_packet_file, trace_file="../traces/trace.txt", file_range="all", sender=[1])
 
-print(cal_qoe())
+    print(cal_qoe())
