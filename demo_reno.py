@@ -14,7 +14,7 @@ from simple_emulator import Reno
 # from simple_emulator import RL
 
 # We provided some function of plotting to make you analyze result easily in utils.py
-from simple_emulator import analyze_pcc_emulator, plot_cwnd
+from simple_emulator import analyze_pcc_emulator, plot_rate
 from simple_emulator import constant
 
 from simple_emulator import cal_qoe
@@ -177,8 +177,8 @@ if __name__ == '__main__':
     # You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#pcc_emulator-analysispng.
     analyze_pcc_emulator(log_packet_file, file_range="all")
 
-    # Output the picture of cwnd_changing.png
+    # Output the picture of rate_changing.png
     # You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#cwnd_changingpng
-    plot_cwnd(log_packet_file, trace_file="traces/trace.txt", file_range="all", sender=[1])
+    plot_rate(log_packet_file, trace_file="traces/trace.txt", file_range="all", sender=[1])
 
     print(cal_qoe())
