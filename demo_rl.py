@@ -324,6 +324,11 @@ class MySolution(Packet_selection, RL):
 
 
 if __name__ == '__main__':
+    
+    # fixed random seed
+    import random
+    random.seed(1)
+    
     # The file path of packets' log
     log_packet_file = "output/packet_log/packet-0.log"
 
