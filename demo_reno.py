@@ -163,10 +163,10 @@ if __name__ == '__main__':
     # You can get more information about parameters at https://github.com/AItransCompetition/simple_emulator/tree/master#constant
     emulator = PccEmulator(
         block_file=["traces/data_video.csv", "traces/data_audio.csv"],
-        trace_file="traces/traces_11.txt",
+        trace_file="traces/trace.txt",
         solution=my_solution,
         USE_CWND=True,
-        ENABLE_LOG=False
+        ENABLE_LOG=True
     )
 
     # Run the emulator and you can specify the time for the emualtor's running.
@@ -178,10 +178,10 @@ if __name__ == '__main__':
 
     # Output the picture of pcc_emulator-analysis.png
     # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#pcc_emulator-analysispng.
-    # analyze_pcc_emulator(log_packet_file, file_range="all")
+    analyze_pcc_emulator(log_packet_file, file_range="all")
 
     # Output the picture of rate_changing.png
     # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#cwnd_changingpng
-    # plot_rate(log_packet_file, trace_file="traces/trace.txt", file_range="all", sender=[1])
+    plot_rate(log_packet_file, trace_file="traces/trace.txt", file_range="all", sender=[1])
 
     print(cal_qoe())
