@@ -281,7 +281,7 @@ class MySolution(Packet_selection, RL):
         """
         The algorithm to select which packet in 'packet_queue' should be sent at time 'cur_time'.
         The following example is selecting packet by the create time firstly, and radio of rest life time to deadline secondly.
-        See more at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#packet_selectionpy.
+        See more at https://github.com/AItransCompetition/simple_emulator/tree/master#packet_selectionpy.
         :param cur_time: float
         :param packet_queue: the list of Packet.You can get more detail about Block in objects/packet.py
         :return: int
@@ -311,14 +311,14 @@ class MySolution(Packet_selection, RL):
     def make_decision(self, cur_time):
         """
         The part of algorithm to make congestion control, which will be call when sender need to send pacekt.
-        See more at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#congestion_control_algorithmpy.
+        See more at https://github.com/AItransCompetition/simple_emulator/tree/master#congestion_control_algorithmpy.
         """
         return super().make_decision(cur_time)
 
     def append_input(self, data):
         """
         The part of algorithm to make congestion control, which will be call when sender get an event about acknowledge or lost from reciever.
-        See more at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#congestion_control_algorithmpy.
+        See more at https://github.com/AItransCompetition/simple_emulator/tree/master#congestion_control_algorithmpy.
         """
         return super().append_input(data)
 
@@ -337,7 +337,7 @@ if __name__ == '__main__':
     # Create the emulator using your solution
     # Specify USE_CWND to decide whether or not use crowded windows. USE_CWND=True by default.
     # Specify ENABLE_LOG to decide whether or not output the log of packets. ENABLE_LOG=True by default.
-    # You can get more information about parameters at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#constant
+    # You can get more information about parameters at https://github.com/AItransCompetition/simple_emulator/tree/master#constant
     emulator = create_2flow_emulator(
         block_file=["../traces/data_video.csv", "../traces/data_audio.csv"],
         trace_file="../traces/trace.txt",
@@ -352,7 +352,7 @@ if __name__ == '__main__':
     emulator.print_debug()
 
     # Output the picture of pcc_emulator-analysis.png
-    # You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#pcc_emulator-analysispng.
+    # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#pcc_emulator-analysispng.
     analyze_pcc_emulator(log_packet_file, file_range="all", sender=[1])
 
     plot_rate(log_packet_file, trace_file="../traces/trace.txt", file_range="all", sender=[1])

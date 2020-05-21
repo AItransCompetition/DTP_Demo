@@ -50,7 +50,7 @@ class MySolution(Packet_selection, Reno):
         """
         The algorithm to select which packet in 'packet_queue' should be sent at time 'cur_time'.
         The following example is selecting packet by the create time firstly, and radio of rest life time to deadline secondly.
-        See more at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#packet_selectionpy.
+        See more at https://github.com/AItransCompetition/simple_emulator/tree/master#packet_selectionpy.
         :param cur_time: float
         :param packet_queue: the list of Packet.You can get more detail about Block in objects/packet.py
         :return: int
@@ -80,7 +80,7 @@ class MySolution(Packet_selection, Reno):
     def make_decision(self, cur_time):
         """
         The part of algorithm to make congestion control, which will be call when sender need to send pacekt.
-        See more at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#congestion_control_algorithmpy.
+        See more at https://github.com/AItransCompetition/simple_emulator/tree/master#congestion_control_algorithmpy.
         """
         return super().make_decision(cur_time)
 
@@ -133,7 +133,7 @@ class MySolution(Packet_selection, Reno):
     def append_input(self, data):
         """
         The part of algorithm to make congestion control, which will be call when sender get an event about acknowledge or lost from reciever.
-        See more at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#congestion_control_algorithmpy.
+        See more at https://github.com/AItransCompetition/simple_emulator/tree/master#congestion_control_algorithmpy.
         """
         self._input_list.append(data)
 
@@ -160,13 +160,13 @@ if __name__ == '__main__':
     # Create the emulator using your solution
     # Specify USE_CWND to decide whether or not use crowded windows. USE_CWND=True by default.
     # Specify ENABLE_LOG to decide whether or not output the log of packets. ENABLE_LOG=True by default.
-    # You can get more information about parameters at https://github.com/Azson/DTP-emulator/tree/pcc-emulator#constant
+    # You can get more information about parameters at https://github.com/AItransCompetition/simple_emulator/tree/master#constant
     emulator = PccEmulator(
         block_file=["traces/data_video.csv", "traces/data_audio.csv"],
-        trace_file="traces/trace.txt",
+        trace_file="traces/traces_11.txt",
         solution=my_solution,
         USE_CWND=True,
-        ENABLE_LOG=True
+        ENABLE_LOG=False
     )
 
     # Run the emulator and you can specify the time for the emualtor's running.
@@ -177,11 +177,11 @@ if __name__ == '__main__':
     emulator.print_debug()
 
     # Output the picture of pcc_emulator-analysis.png
-    # You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#pcc_emulator-analysispng.
-    analyze_pcc_emulator(log_packet_file, file_range="all")
+    # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#pcc_emulator-analysispng.
+    # analyze_pcc_emulator(log_packet_file, file_range="all")
 
     # Output the picture of rate_changing.png
-    # You can get more information from https://github.com/Azson/DTP-emulator/tree/pcc-emulator#cwnd_changingpng
-    plot_rate(log_packet_file, trace_file="traces/trace.txt", file_range="all", sender=[1])
+    # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#cwnd_changingpng
+    # plot_rate(log_packet_file, trace_file="traces/trace.txt", file_range="all", sender=[1])
 
     print(cal_qoe())
