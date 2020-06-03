@@ -1,11 +1,11 @@
 """
 This demo aims to help player running system quickly by using the pypi library DTP-Emualtor https://pypi.org/project/DTP-Emulator/.
 """
-from simple_emulator import Emulator, CongestionControl
+from simple_emulator import PccEmulator, CongestionControl
 
 # We provided a simple algorithms about packet selection to help you being familiar with this competition.
 # In this example, it will select the packet according to packet's created time first and radio of rest life time to deadline secondly.
-from simple_emulator import PacketSelection
+from simple_emulator import Packet_selection
 
 # We provided some simple algorithms about congestion control to help you being familiar with this competition.
 # Like Reno and an example about reinforcement learning implemented by tensorflow
@@ -14,7 +14,7 @@ from simple_emulator import Reno
 # from simple_emulator import RL
 
 # We provided some function of plotting to make you analyze result easily in utils.py
-from simple_emulator import analyze_emulator, plot_rate
+from simple_emulator import analyze_pcc_emulator, plot_rate
 from simple_emulator import constant
 
 from simple_emulator import cal_qoe
@@ -25,7 +25,7 @@ EVENT_TYPE_TEMP='T'
 
 # Your solution should include packet selection and congestion control.
 # So, we recommend you to achieve it by inherit the objects we provided and overwritten necessary method.
-class MySolution(PacketSelection, Reno):
+class MySolution(Packet_selection, Reno):
 
     def __init__(self):
         # base parameters in CongestionControl
@@ -161,7 +161,7 @@ if __name__ == '__main__':
     # Specify USE_CWND to decide whether or not use crowded windows. USE_CWND=True by default.
     # Specify ENABLE_LOG to decide whether or not output the log of packets. ENABLE_LOG=True by default.
     # You can get more information about parameters at https://github.com/AItransCompetition/simple_emulator/tree/master#constant
-    emulator = Emulator(
+    emulator = PccEmulator(
         block_file=["traces/data_video.csv", "traces/data_audio.csv"],
         trace_file="traces/trace.txt",
         solution=my_solution,
@@ -178,7 +178,7 @@ if __name__ == '__main__':
 
     # Output the picture of emulator-analysis.png
     # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#emulator-analysispng.
-    analyze_emulator(log_packet_file, file_range="all")
+    analyze_pcc_emulator(log_packet_file, file_range="all")
 
     # Output the picture of rate_changing.png
     # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#cwnd_changingpng

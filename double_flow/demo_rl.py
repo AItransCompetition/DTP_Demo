@@ -1,14 +1,14 @@
 """
 This demo aims to help player running system quickly by using the pypi library DTP-Emualtor https://pypi.org/project/DTP-Emulator/.
 """
-from simple_emulator import Emulator, CongestionControl, create_2flow_emulator
+from simple_emulator import PccEmulator, CongestionControl, create_2flow_emulator
 
 # We provided a simple algorithms about packet selection to help you being familiar with this competition.
 # In this example, it will select the packet according to packet's created time first and radio of rest life time to deadline secondly.
-from simple_emulator import PacketSelection
+from simple_emulator import Packet_selection
 
 # We provided some function of plotting to make you analyze result easily in utils.py
-from simple_emulator import analyze_emulator, plot_cwnd, plot_rate
+from simple_emulator import analyze_pcc_emulator, plot_cwnd, plot_rate
 
 from simple_emulator import constant
 from simple_emulator import cal_qoe
@@ -275,7 +275,7 @@ class RL(CongestionControl):
 
 # Your solution should include packet selection and congestion control.
 # So, we recommend you to achieve it by inherit the objects we provided and overwritten necessary method.
-class MySolution(PacketSelection, RL):
+class MySolution(Packet_selection, RL):
 
     def select_packet(self, cur_time, packet_queue):
         """
@@ -353,7 +353,7 @@ if __name__ == '__main__':
 
     # Output the picture of emulator-analysis.png
     # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#emulator-analysispng.
-    analyze_emulator(log_packet_file, file_range="all", sender=[1])
+    analyze_pcc_emulator(log_packet_file, file_range="all", sender=[1])
 
     plot_rate(log_packet_file, trace_file="../traces/trace.txt", file_range="all", sender=[1])
 
