@@ -1,11 +1,11 @@
 """
 This demo aims to help player running system quickly by using the pypi library DTP-Emualtor https://pypi.org/project/DTP-Emulator/.
 """
-from simple_emulator import PccEmulator, CongestionControl, create_2flow_emulator
+from simple_emulator import Emulator, CongestionControl, create_2flow_emulator
 
 # We provided a simple algorithms about packet selection to help you being familiar with this competition.
 # In this example, it will select the packet according to packet's created time first and radio of rest life time to deadline secondly.
-from simple_emulator import Packet_selection
+from simple_emulator import PacketSelection
 
 # We provided some simple algorithms about congestion control to help you being familiar with this competition.
 # Like Reno and an example about reinforcement learning implemented by tensorflow
@@ -14,7 +14,7 @@ from simple_emulator import Reno
 # from simple_emulator import RL
 
 # We provided some function of plotting to make you analyze result easily in utils.py
-from simple_emulator import analyze_pcc_emulator, plot_rate
+from simple_emulator import analyze_emulator, plot_rate
 from simple_emulator import constant
 from simple_emulator import cal_qoe
 
@@ -26,7 +26,7 @@ EVENT_TYPE_TEMP='T'
 
 # Your solution should include packet selection and congestion control.
 # So, we recommend you to achieve it by inherit the objects we provided and overwritten necessary method.
-class MySolution(Packet_selection, Reno):
+class MySolution(PacketSelection, Reno):
 
     def __init__(self):
         # base parameters in CongestionControl
@@ -175,9 +175,9 @@ if __name__ == '__main__':
     # print the debug information of links and senders
     emulator.print_debug()
 
-    # Output the picture of pcc_emulator-analysis.png
-    # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#pcc_emulator-analysispng.
-    analyze_pcc_emulator(log_packet_file, file_range="all", sender=[1])
+    # Output the picture of emulator-analysis.png
+    # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#emulator-analysispng.
+    analyze_emulator(log_packet_file, file_range="all", sender=[1])
 
     # Output the picture of rate_changing.png
     # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#cwnd_changingpng
