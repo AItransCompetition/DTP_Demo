@@ -5,7 +5,7 @@ from simple_emulator import Emulator, CongestionControl, create_2flow_emulator
 
 # We provided a simple algorithms about packet selection to help you being familiar with this competition.
 # In this example, it will select the packet according to packet's created time first and radio of rest life time to deadline secondly.
-from simple_emulator import Packet_selection
+from simple_emulator import PacketSelection
 
 # We provided some function of plotting to make you analyze result easily in utils.py
 from simple_emulator import analyze_emulator, plot_cwnd, plot_rate
