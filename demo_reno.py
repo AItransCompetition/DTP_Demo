@@ -29,21 +29,31 @@ class MySolution(Packet_selection, Reno):
 
     def __init__(self):
         # base parameters in CongestionControl
+        # the data appended in function "append_input"
         self._input_list = []
+        # the value of crowded window
         self.cwnd = 1
+        # the value of sending rate
         self.send_rate = float("inf")
+        # the value of pacing rate
         self.pacing_rate = float("inf")
-        self.call_nums = 0
+        # use cwnd
+        self.USE_CWND=True
 
         # for reno
         self.ssthresh = float("inf")
         self.curr_state = "slow_start"
         self.states = ["slow_start", "congestion_avoidance", "fast_recovery"]
+        # the number of lost packets
         self.drop_nums = 0
+        # the number of acknowledgement packets
         self.ack_nums = 0
 
+        # current time
         self.cur_time = -1
+        # the value of cwnd at last packet event
         self.last_cwnd = 0
+        # the number of lost packets received at the current moment
         self.instant_drop_nums = 0
 
     def select_packet(self, cur_time, packet_queue):
@@ -58,13 +68,13 @@ class MySolution(Packet_selection, Reno):
         def is_better(packet):
             best_block_create_time = best_packet.block_info["Create_time"]
             packet_block_create_time = packet.block_info["Create_time"]
-            # if packet is miss ddl
-            if (cur_time - packet_block_create_time) >= packet.block_info["Deadline"]:
-                return False
+            # select packet which is not missing ddl
             if (cur_time - best_block_create_time) >= best_packet.block_info["Deadline"]:
                 return True
+            # select packet which is created earlier
             if best_block_create_time != packet_block_create_time:
                 return best_block_create_time > packet_block_create_time
+            # selct packet which is more urgent
             return (cur_time - best_block_create_time) * best_packet.block_info["Deadline"] > \
                    (cur_time - packet_block_create_time) * packet.block_info["Deadline"]
 
@@ -88,23 +98,31 @@ class MySolution(Packet_selection, Reno):
         event_type = data["event_type"]
         event_time = data["event_time"]
 
+        # see Algorithm design problem in QA section of the official website
         if self.cur_time < event_time:
+            # initial parameters at a new moment
             self.last_cwnd = 0
             self.instant_drop_nums = 0
 
+        # if packet is dropped
         if event_type == EVENT_TYPE_DROP:
+            # dropping more than one packet at a same time is considered one event of packet loss 
             if self.instant_drop_nums > 0:
                 return
             self.instant_drop_nums += 1
+            # step into fast recovery state
             self.curr_state = self.states[2]
             self.drop_nums += 1
+            # clear acknowledgement count
             self.ack_nums = 0
             # Ref 1 : For ensuring the event type, drop or ack?
             self.cur_time = event_time
             if self.last_cwnd > 0 and self.last_cwnd != self.cwnd:
+                # rollback to the old value of cwnd caused by acknowledgment first
                 self.cwnd = self.last_cwnd
                 self.last_cwnd = 0
 
+        # if packet is acknowledged
         elif event_type == EVENT_TYPE_FINISHED:
             # Ref 1
             if event_time <= self.cur_time:
@@ -112,19 +130,24 @@ class MySolution(Packet_selection, Reno):
             self.cur_time = event_time
             self.last_cwnd = self.cwnd
 
+            # increase the number of acknowledgement packets
             self.ack_nums += 1
+            # double cwnd in slow_start state
             if self.curr_state == self.states[0]:
                 if self.ack_nums == self.cwnd:
                     self.cwnd *= 2
                     self.ack_nums = 0
+                # step into congestion_avoidance state due to exceeding threshhold
                 if self.cwnd >= self.ssthresh:
                     self.curr_state = self.states[1]
 
+            # increase cwnd linearly in congestion_avoidance state
             elif self.curr_state == self.states[1]:
                 if self.ack_nums == self.cwnd:
                     self.cwnd += 1
                     self.ack_nums = 0
 
+        # reset threshhold and cwnd in fast_recovery state
         if self.curr_state == self.states[2]:
             self.ssthresh = max(self.cwnd // 2, 1)
             self.cwnd = self.ssthresh
@@ -135,10 +158,14 @@ class MySolution(Packet_selection, Reno):
         The part of algorithm to make congestion control, which will be call when sender get an event about acknowledge or lost from reciever.
         See more at https://github.com/AItransCompetition/simple_emulator/tree/master#congestion_control_algorithmpy.
         """
+        # add new data to history data
         self._input_list.append(data)
 
+        # only handle acknowledge and lost packet
         if data["event_type"] != EVENT_TYPE_TEMP:
+            # specify congestion control algorithm
             self.cc_trigger(data)
+            # set cwnd or sending rate in sender
             return {
                 "cwnd" : self.cwnd,
                 "send_rate" : self.send_rate
@@ -165,7 +192,7 @@ if __name__ == '__main__':
         block_file=["traces/data_video.csv", "traces/data_audio.csv"],
         trace_file="traces/trace.txt",
         solution=my_solution,
-        USE_CWND=True,
+        # enable logging packet. You can train faster if USE_CWND=False
         ENABLE_LOG=True
     )
 
@@ -184,4 +211,4 @@ if __name__ == '__main__':
     # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#cwnd_changingpng
     plot_rate(log_packet_file, trace_file="traces/trace.txt", file_range="all", sender=[1])
 
-    print(cal_qoe())
+    print("Qoe : %d" % (cal_qoe()) )
