@@ -28,6 +28,7 @@ EVENT_TYPE_TEMP='T'
 class MySolution(Packet_selection, Reno):
 
     def __init__(self):
+        super().__init__()
         # base parameters in CongestionControl
         # the data appended in function "append_input"
         self._input_list = []
