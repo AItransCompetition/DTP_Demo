@@ -128,7 +128,7 @@ class DQN(object):
         self.optimizer.step()
 
 # change every EPISODE times
-EPISODE = 20 
+EPISODE = 50 
 # send rate, lost rate *2, rtt sample
 N_F = 1 + 2 + 2 + EPISODE
 # 1.4,1.1,0.4
@@ -169,31 +169,40 @@ class RL(CongestionControl):
         self.last_state.extend([0]*4)
         for i in range(EPISODE):
             self.last_state.append(0)
+        
+        # update in 2020-7-30
+        self.event_nums = 0
+        self.event_lost_nums = 0
+        self.event_ack_nums = 0
 
     def cc_trigger(self, data):
 
         event_type = data["event_type"]
         event_time = data["event_time"]
         self.latency_list.append(data["packet_information_dict"]["Latency"])
-        
+        self.event_nums += 1
+
         if event_type == EVENT_TYPE_DROP:
             self.result_list.append(1)
+            self.event_lost_nums += 1
         else:
             self.result_list.append(0)
+            self.event_ack_nums += 1
 
         self.counter += 1
         if self.counter == EPISODE: # choose action every EPISODE times
             self.counter = 0
-            print()
-            print("EPISODE: send_rate is {}".format(self.send_rate))
-            print()
+            # print()
+            # print("EPISODE: send_rate is {}".format(self.send_rate))
+            # print()
             # loss rate
-            sum_loss_rate = sum([1 for data in self._input_list if data["event_type"] == 'D']) / len(self._input_list)
+            sum_loss_rate = self.event_lost_nums / self.event_nums
             instant_packet = list(filter(lambda item: self._input_list[-1]["event_time"] - item["event_time"] < 1., self._input_list))
-            instant_loss_rate = sum([1 for data in instant_packet if data["event_type"] == 'D']) / len(instant_packet) if len(instant_packet) > 0 else 0
+            instant_loss_nums = sum([1 for data in instant_packet if data["event_type"] == 'D']) 
+            instant_loss_rate = instant_loss_nums / len(instant_packet) if len(instant_packet) > 0 else 0
             # throughput
-            sum_rate = sum([1 for data in self._input_list if data["event_type"] == 'F']) / (self._input_list[-1]["event_time"] - self._input_list[0]["event_time"])
-            instant_rate = sum([1 for data in instant_packet if data["event_type"] == 'F']) / (instant_packet[-1]["event_time"] - instant_packet[0]["event_time"]) if len(instant_packet) > 0 else 0
+            sum_rate = self.event_ack_nums / event_time
+            instant_rate = (len(instant_packet) - instant_loss_nums) / (instant_packet[-1]["event_time"] - instant_packet[0]["event_time"]) if len(instant_packet) > 1 else 0
 
             # declining random rate
             self.random_counter-=1
