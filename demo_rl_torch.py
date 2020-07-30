@@ -25,6 +25,7 @@ from torch.autograd import Variable
 import random
 
 np.random.seed(2)
+torch.manual_seed(1)
 
 EVENT_TYPE_FINISHED='F'
 EVENT_TYPE_DROP='D'
@@ -327,7 +328,7 @@ if __name__ == '__main__':
         trace_file="traces/trace.txt",
         solution=my_solution,
         SEED=1,
-        ENABLE_LOG=False
+        ENABLE_LOG=True
     )
 
     # Run the emulator and you can specify the time for the emualtor's running.
@@ -339,8 +340,8 @@ if __name__ == '__main__':
 
     # Output the picture of emulator-analysis.png
     # You can get more information from https://github.com/AItransCompetition/simple_emulator/tree/master#emulator-analysispng.
-    # analyze_pcc_emulator(log_packet_file, file_range="all")
+    analyze_pcc_emulator(log_packet_file, file_range="all")
 
-    # plot_rate(log_packet_file, trace_file="traces/trace.txt", file_range="all")
+    plot_rate(log_packet_file, trace_file="traces/trace.txt", file_range="all")
 
     print(cal_qoe())
