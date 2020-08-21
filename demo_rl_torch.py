@@ -202,7 +202,8 @@ class RL(CongestionControl):
             instant_loss_rate = instant_loss_nums / len(instant_packet) if len(instant_packet) > 0 else 0
             # throughput
             sum_rate = self.event_ack_nums / event_time
-            instant_rate = (len(instant_packet) - instant_loss_nums) / (instant_packet[-1]["event_time"] - instant_packet[0]["event_time"]) if len(instant_packet) > 1 else 0
+            instant_ack_packet = list(filter(lambda data:data["event_type"] == 'F', instant_packet))
+            instant_rate = len(instant_ack_packet) / (instant_packet[-1]["event_time"] - instant_packet[0]["event_time"]) if len(instant_packet) > 1 else 0
 
             # declining random rate
             self.random_counter-=1
